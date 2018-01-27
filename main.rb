@@ -21,7 +21,7 @@ tag = config["tag"]
 begin
   stream.stream(path) do |toot|
     next if !toot.kind_of?(Mastodon::Status)
-    if Sanitize.clean(toot.content).include?(tag) then
+    if Regexp.new(tag, Regexp::IGNORECASE) =~ Sanitize.clean(toot.content) then
       tw.update(toot.account.acct + ":" + Sanitize.clean(toot.content) + toot.url)
     end
   end
